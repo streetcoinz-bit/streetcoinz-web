@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SCZ Operator Console</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      background: #000;
+      color: #33ff99;
+      font-family: monospace;
+      padding: 30px;
+    }
+    .dim { color: #666; }
+    .prompt { color: #33ff99; }
+    .blink {
+      animation: blink 1s steps(1) infinite;
+    }
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<div>
+STREETCOINZ SYSTEM v1.0<br>
+Chain: BNB<br>
+Contract: VERIFIED<br>
+Status: ONLINE<br>
+<br>
+<span class="dim">Type 'help' to begin.</span><br><br>
+
+<span class="prompt">scz@operator:$</span>
+<span class="blink">█</span>
+</div>
+
+<script>
+  console.log("Streetcoinz Operator Mode loaded");
+</script>
+
+</body>
+</html>

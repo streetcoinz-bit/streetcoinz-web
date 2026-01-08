@@ -1,169 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Streetcoinz :: Operator Terminal</title>
-
-<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-
-<style>
-body {
-  margin: 0;
-  background: #06030d;
-  color: #cdb8ff;
-  font-family: monospace;
-}
-#terminal {
-  padding: 20px;
-  max-width: 900px;
-  margin: auto;
-}
-.line { margin-bottom: 6px; }
-.prompt { color: #9f6bff; }
-.input {
-  outline: none;
-  border: none;
-  background: transparent;
-  color: #fff;
-  font-family: monospace;
-  width: 90%;
-}
-.system { color: #7affc3; }
-.warn { color: #ff6b6b; }
-.lock { color: #ffb86c; }
-.secret { color: #50fa7b; }
-footer {
-  opacity: .5;
-  margin-top: 40px;
-  font-size: 12px;
-}
-</style>
+  <meta charset="UTF-8">
+  <title>Streetcoinz (SCZ)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="assets/scz.css">
 </head>
-
 <body>
-<div id="terminal"></div>
 
-<script>
-const terminal = document.getElementById("terminal");
-let access = "PUBLIC";
-let userAddress = null;
+<div class="container">
+  <h1>🟣 Streetcoinz (SCZ)</h1>
+  <p class="small">Access-based Web3 utility token</p>
 
-const SCZ_CONTRACT = "0x177ba0bff8e7233998a38e1b5525f5969bef4d51";
-const SCZ_ABI = [
-  "function balanceOf(address) view returns (uint256)",
-  "function decimals() view returns (uint8)"
-];
+  <div class="card">
+    <h2>What is Streetcoinz?</h2>
+    <p>
+      Streetcoinz (SCZ) is a utility token used to unlock access,
+      features, and roles inside the Streetcoinz ecosystem.
+    </p>
+  </div>
 
-function print(text, cls="line") {
-  const div = document.createElement("div");
-  div.className = cls;
-  div.textContent = text;
-  terminal.appendChild(div);
-  window.scrollTo(0, document.body.scrollHeight);
-}
+  <div class="card">
+    <h2>Access Levels</h2>
+    <ul>
+      <li>⚪ <strong>FREE</strong> — 0 SCZ</li>
+      <li>🔵 <strong>LIGHT</strong> — ≥ 500 SCZ</li>
+      <li>🟣 <strong>ULTRA</strong> — ≥ 1000 SCZ</li>
+    </ul>
+  </div>
 
-function prompt() {
-  const div = document.createElement("div");
-  div.className = "line";
-  div.innerHTML = `<span class="prompt">scz@system:$</span> <input class="input" autofocus />`;
-  terminal.appendChild(div);
-  const input = div.querySelector("input");
-  input.focus();
+  <div class="card">
+    <button onclick="window.open('https://discord.com/users/@me','_blank')">
+      Unlock via Discord
+    </button>
+    <p class="small">No signup. No email. Just wallet.</p>
+  </div>
 
-  input.addEventListener("keydown", async e => {
-    if (e.key === "Enter") {
-      const cmd = input.value.trim().toLowerCase();
-      div.innerHTML = `<span class="prompt">scz@system:$</span> ${cmd}`;
-      await handle(cmd);
-      prompt();
-    }
-  });
-}
+  <div class="card">
+    <a href="legality.html">📜 Legality & Transparency</a><br>
+    <a href="operator.html">⚫ Enter Operator Mode</a>
+  </div>
 
-async function connectWallet() {
-  if (!window.ethereum) {
-    print("No Web3 wallet detected.", "warn");
-    return;
-  }
+  <p class="small">
+    Streetcoinz — build slow, build real.
+  </p>
+</div>
 
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  await provider.send("eth_requestAccounts", []);
-  const signer = provider.getSigner();
-  userAddress = await signer.getAddress();
-
-  print("Wallet connected:", "system");
-  print(userAddress, "system");
-
-  const scz = new ethers.Contract(SCZ_CONTRACT, SCZ_ABI, provider);
-  const raw = await scz.balanceOf(userAddress);
-  const decimals = await scz.decimals();
-  const balance = ethers.utils.formatUnits(raw, decimals);
-
-  print("SCZ Balance: " + balance, balance > 0 ? "system" : "warn");
-
-  if (balance > 0) {
-    access = "HOLDER";
-    print("Access Level: HOLDER", "secret");
-  } else {
-    print("Access Level: PUBLIC", "lock");
-  }
-}
-
-async function handle(cmd) {
-  switch(cmd) {
-    case "help":
-      print("Available commands:");
-      print("- status");
-      print("- contract");
-      print("- connect wallet");
-      print("- check access");
-      print("- clear");
-      break;
-
-    case "status":
-      print("[OK] System online", "system");
-      print("[INFO] Access: " + access);
-      break;
-
-    case "contract":
-      print("Streetcoinz (SCZ)");
-      print("BNB Chain • BEP20");
-      print(SCZ_CONTRACT);
-      break;
-
-    case "connect wallet":
-      await connectWallet();
-      break;
-
-    case "check access":
-      print("Current access: " + access, access === "HOLDER" ? "secret" : "lock");
-      break;
-
-    case "clear":
-      terminal.innerHTML = "";
-      break;
-
-    default:
-      print("Command not recognized. Type 'help'.", "warn");
-  }
-}
-
-[
-  "STREETCOINZ SYSTEM v2.0",
-  "Booting real Web3 interface...",
-  "BNB Chain ready",
-  "Contract loaded",
-  "Type 'connect wallet' to begin."
-].forEach((line, i) => {
-  setTimeout(() => print(line), i * 400);
-});
-
-setTimeout(prompt, 2200);
-</script>
-
-<footer>
-Streetcoinz • Real on-chain access • Terminal-first
-</footer>
 </body>
 </html>
