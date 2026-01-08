@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Streetcoinz :: Operator Terminal</title>
 
+<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+
 <style>
 body {
   margin: 0;
@@ -45,7 +47,13 @@ footer {
 <script>
 const terminal = document.getElementById("terminal");
 let access = "PUBLIC";
-const operatorUnlock = Date.now() + (1000 * 60 * 60 * 24 * 3); // 3 days countdown
+let userAddress = null;
+
+const SCZ_CONTRACT = "0x177ba0bff8e7233998a38e1b5525f5969bef4d51";
+const SCZ_ABI = [
+  "function balanceOf(address) view returns (uint256)",
+  "function decimals() view returns (uint8)"
+];
 
 function print(text, cls="line") {
   const div = document.createElement("div");
@@ -63,73 +71,73 @@ function prompt() {
   const input = div.querySelector("input");
   input.focus();
 
-  input.addEventListener("keydown", e => {
+  input.addEventListener("keydown", async e => {
     if (e.key === "Enter") {
       const cmd = input.value.trim().toLowerCase();
       div.innerHTML = `<span class="prompt">scz@system:$</span> ${cmd}`;
-      handle(cmd);
+      await handle(cmd);
       prompt();
     }
   });
 }
 
-function countdown() {
-  const diff = operatorUnlock - Date.now();
-  if (diff <= 0) return "ACCESS WINDOW OPEN";
-  const h = Math.floor(diff / 1000 / 60 / 60);
-  const m = Math.floor(diff / 1000 / 60) % 60;
-  const s = Math.floor(diff / 1000) % 60;
-  return `${h}h ${m}m ${s}s`;
+async function connectWallet() {
+  if (!window.ethereum) {
+    print("No Web3 wallet detected.", "warn");
+    return;
+  }
+
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  await provider.send("eth_requestAccounts", []);
+  const signer = provider.getSigner();
+  userAddress = await signer.getAddress();
+
+  print("Wallet connected:", "system");
+  print(userAddress, "system");
+
+  const scz = new ethers.Contract(SCZ_CONTRACT, SCZ_ABI, provider);
+  const raw = await scz.balanceOf(userAddress);
+  const decimals = await scz.decimals();
+  const balance = ethers.utils.formatUnits(raw, decimals);
+
+  print("SCZ Balance: " + balance, balance > 0 ? "system" : "warn");
+
+  if (balance > 0) {
+    access = "HOLDER";
+    print("Access Level: HOLDER", "secret");
+  } else {
+    print("Access Level: PUBLIC", "lock");
+  }
 }
 
-function handle(cmd) {
+async function handle(cmd) {
   switch(cmd) {
     case "help":
       print("Available commands:");
       print("- status");
       print("- contract");
+      print("- connect wallet");
       print("- check access");
-      print("- operator countdown");
       print("- clear");
       break;
 
     case "status":
       print("[OK] System online", "system");
-      print("[OK] Token active", "system");
       print("[INFO] Access: " + access);
       break;
 
     case "contract":
       print("Streetcoinz (SCZ)");
       print("BNB Chain • BEP20");
-      print("0x177ba0bff8e7233998a38e1b5525f5969bef4d51");
+      print(SCZ_CONTRACT);
+      break;
+
+    case "connect wallet":
+      await connectWallet();
       break;
 
     case "check access":
-      print("Checking SCZ balance...");
-      print("Balance: NOT DETECTED", "warn");
-      print("Access Level: PUBLIC", "lock");
-      break;
-
-    case "operator countdown":
-      print("Operator access unlock in:");
-      print(countdown(), "lock");
-      break;
-
-    case "whoami":
-      print("anonymous operator", "secret");
-      break;
-
-    case "sudo":
-      print("Permission denied. This incident will be reported.", "warn");
-      break;
-
-    case "rm -rf /":
-      print("Nice try 😈", "warn");
-      break;
-
-    case "unlock scz":
-      print("[LOCKED] Requires SCZ operator key.", "lock");
+      print("Current access: " + access, access === "HOLDER" ? "secret" : "lock");
       break;
 
     case "clear":
@@ -142,21 +150,20 @@ function handle(cmd) {
 }
 
 [
-  "STREETCOINZ SYSTEM v1.1",
-  "Booting operator interface...",
-  "Connecting to BNB Chain...",
-  "Contract verified",
-  "Access Level: PUBLIC",
-  "Type 'help' to begin."
+  "STREETCOINZ SYSTEM v2.0",
+  "Booting real Web3 interface...",
+  "BNB Chain ready",
+  "Contract loaded",
+  "Type 'connect wallet' to begin."
 ].forEach((line, i) => {
   setTimeout(() => print(line), i * 400);
 });
 
-setTimeout(prompt, 2500);
+setTimeout(prompt, 2200);
 </script>
 
 <footer>
-Streetcoinz • Terminal-first • Build in public
+Streetcoinz • Real on-chain access • Terminal-first
 </footer>
 </body>
 </html>
