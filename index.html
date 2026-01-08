@@ -12,19 +12,13 @@ body {
   color: #cdb8ff;
   font-family: monospace;
 }
-
 #terminal {
   padding: 20px;
   max-width: 900px;
   margin: auto;
 }
-
 .line { margin-bottom: 6px; }
-
-.prompt {
-  color: #9f6bff;
-}
-
+.prompt { color: #9f6bff; }
 .input {
   outline: none;
   border: none;
@@ -33,22 +27,10 @@ body {
   font-family: monospace;
   width: 90%;
 }
-
-.cursor {
-  display: inline-block;
-  width: 10px;
-  background: #c084ff;
-  animation: blink 1s infinite;
-}
-
-@keyframes blink {
-  50% { background: transparent; }
-}
-
 .system { color: #7affc3; }
 .warn { color: #ff6b6b; }
 .lock { color: #ffb86c; }
-
+.secret { color: #50fa7b; }
 footer {
   opacity: .5;
   margin-top: 40px;
@@ -63,16 +45,7 @@ footer {
 <script>
 const terminal = document.getElementById("terminal");
 let access = "PUBLIC";
-
-const boot = [
-  "STREETCOINZ SYSTEM v1.0",
-  "Initializing BNB Chain...",
-  "Loading contract...",
-  "Contract: 0x177ba0bf...f4d51",
-  "Status: VERIFIED",
-  "Access Level: PUBLIC",
-  "Type 'help' to begin."
-];
+const operatorUnlock = Date.now() + (1000 * 60 * 60 * 24 * 3); // 3 days countdown
 
 function print(text, cls="line") {
   const div = document.createElement("div");
@@ -100,6 +73,15 @@ function prompt() {
   });
 }
 
+function countdown() {
+  const diff = operatorUnlock - Date.now();
+  if (diff <= 0) return "ACCESS WINDOW OPEN";
+  const h = Math.floor(diff / 1000 / 60 / 60);
+  const m = Math.floor(diff / 1000 / 60) % 60;
+  const s = Math.floor(diff / 1000) % 60;
+  return `${h}h ${m}m ${s}s`;
+}
+
 function handle(cmd) {
   switch(cmd) {
     case "help":
@@ -107,7 +89,7 @@ function handle(cmd) {
       print("- status");
       print("- contract");
       print("- check access");
-      print("- init operator");
+      print("- operator countdown");
       print("- clear");
       break;
 
@@ -129,8 +111,25 @@ function handle(cmd) {
       print("Access Level: PUBLIC", "lock");
       break;
 
-    case "init operator":
-      print("[DENIED] Operator key required.", "lock");
+    case "operator countdown":
+      print("Operator access unlock in:");
+      print(countdown(), "lock");
+      break;
+
+    case "whoami":
+      print("anonymous operator", "secret");
+      break;
+
+    case "sudo":
+      print("Permission denied. This incident will be reported.", "warn");
+      break;
+
+    case "rm -rf /":
+      print("Nice try 😈", "warn");
+      break;
+
+    case "unlock scz":
+      print("[LOCKED] Requires SCZ operator key.", "lock");
       break;
 
     case "clear":
@@ -142,15 +141,22 @@ function handle(cmd) {
   }
 }
 
-boot.forEach((line, i) => {
+[
+  "STREETCOINZ SYSTEM v1.1",
+  "Booting operator interface...",
+  "Connecting to BNB Chain...",
+  "Contract verified",
+  "Access Level: PUBLIC",
+  "Type 'help' to begin."
+].forEach((line, i) => {
   setTimeout(() => print(line), i * 400);
 });
 
-setTimeout(prompt, boot.length * 400 + 300);
+setTimeout(prompt, 2500);
 </script>
 
 <footer>
-Streetcoinz • Built in terminal • No hype
+Streetcoinz • Terminal-first • Build in public
 </footer>
 </body>
 </html>
