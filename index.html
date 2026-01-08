@@ -1,47 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Streetcoinz Bit</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Streetcoinz Bit is a BEP20 token on BNB Chain.">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Streetcoinz (SCZ)</title>
   <style>
     body {
-      background:#0f0b1e;
-      color:#ffffff;
-      font-family: Arial, sans-serif;
-      text-align:center;
-      padding:40px;
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: radial-gradient(circle at top, #2b145a, #0b0614);
+      color: #eee;
+    }
+    .container {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
     }
     .card {
-      max-width:600px;
-      margin:auto;
-      background:#1b1533;
-      padding:30px;
-      border-radius:12px;
+      max-width: 720px;
+      width: 100%;
+      background: rgba(40, 20, 80, 0.55);
+      backdrop-filter: blur(10px);
+      border-radius: 18px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.45);
+      text-align: center;
     }
-    h1 { color:#a855f7; }
-    a { color:#a855f7; text-decoration:none; font-weight:bold; }
-    .small { font-size:14px; opacity:0.7; }
+    h1 {
+      font-size: 42px;
+      margin-bottom: 10px;
+      color: #b77bff;
+    }
+    h2 {
+      font-size: 22px;
+      margin-top: 40px;
+      color: #d0b3ff;
+    }
+    p {
+      line-height: 1.6;
+      opacity: .95;
+    }
+    .mono {
+      font-family: monospace;
+      background: rgba(0,0,0,.35);
+      padding: 10px;
+      border-radius: 8px;
+      word-break: break-all;
+      margin-top: 12px;
+    }
+    .btn {
+      display: inline-block;
+      margin-top: 18px;
+      padding: 12px 22px;
+      border-radius: 999px;
+      background: linear-gradient(135deg,#8f4dff,#c084ff);
+      color: #0b0614;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    ul {
+      text-align: left;
+      margin-top: 16px;
+    }
+    li {
+      margin-bottom: 8px;
+    }
+    footer {
+      margin-top: 40px;
+      opacity: .6;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>Streetcoinz Bit</h1>
-    <p>Community-driven BEP20 token built on BNB Chain.</p>
+  <div class="container">
+    <div class="card">
+      <h1>Streetcoinz (SCZ)</h1>
+      <p>
+        Community-driven BEP20 operator token built on BNB Chain.<br/>
+        Built in public. Terminal-first. No hype.
+      </p>
 
-    <p class="small">
-      Contract Address:<br>
-      0x177ba0bff8e7233998a38e1b5525f5969bef4d51
-    </p>
+      <div class="mono">
+        Contract: 0x177ba0bff8e7233998a38e1b5525f5969bef4d51
+      </div>
 
-    <p>
-      <a href="https://bscscan.com/token/0x177ba0bff8e7233998a38e1b5525f5969bef4d51" target="_blank">
+      <a class="btn" href="https://bscscan.com/token/0x177ba0bff8e7233998a38e1b5525f5969bef4d51" target="_blank">
         View on BscScan
       </a>
-    </p>
 
-    <p class="small">© 2026 Streetcoinz Bit</p>
+      <h2>Why Streetcoinz?</h2>
+      <ul>
+        <li>🔌 Access token for tools, bots, and operator features</li>
+        <li>💻 Built from terminal, not influencers</li>
+        <li>🧠 No promises. Only visible progress</li>
+        <li>🌐 Open infra & transparent development</li>
+      </ul>
+
+      <h2>Utility (Planned)</h2>
+      <ul>
+        <li>SCZ-gated Discord / tools</li>
+        <li>Signal & automation access</li>
+        <li>Operator voting</li>
+        <li>Burn / usage-based mechanics</li>
+      </ul>
+
+      <h2>Progress</h2>
+      <ul>
+        <li>✅ Token deployed</li>
+        <li>✅ Website live</li>
+        <li>✅ TrustWallet PR submitted</li>
+        <li>⏳ Logo merge pending</li>
+        <li>⏳ Tools & bots rollout</li>
+      </ul>
+
+      <footer>
+        © 2026 Streetcoinz • Built in public
+      </footer>
+    </div>
   </div>
 </body>
 </html>
